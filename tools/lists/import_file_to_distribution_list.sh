@@ -11,7 +11,7 @@ do
 
     echo "Deploy ${list}..."
 
-echo "    zmprov -l createDistributionList ${list} "
+    zmprov -l createDistributionList ${list} 
 
     echo "done"
 
@@ -21,7 +21,7 @@ echo "    zmprov -l createDistributionList ${list} "
 
           echo "Add $member in $list ..."
 
-echo "          zmprov -l addDistributionListMember $list $member "
+          zmprov -l addDistributionListMember $list $member 
 
           echo "done" 
 
