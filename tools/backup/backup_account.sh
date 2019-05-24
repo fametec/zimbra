@@ -12,7 +12,7 @@ then
 
 if [ -z $2 ]
 then
-    echo "Second params not found..."
+    echo "Second param not found..."
     echo "Use: $0 account backup_file.tgz"
     exit 1
 fi
