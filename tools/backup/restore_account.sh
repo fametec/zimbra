@@ -4,14 +4,14 @@
 
 if [ -z $1 ]
 then
-    echo "First param not found..."
+    echo "Params not found..."
     echo "Use: $0 account backup_file.tgz"
     exit 1
  fi
 
 if [ -z $2 ]
 then
-    echo "Second params not found..."
+    echo "Params not found..."
     echo "Use: $0 account backup_file.tgz"
     exit 1
 fi
@@ -27,7 +27,8 @@ fi
 
 echo -n "Restoring ${1}..."
 
-/opt/zimbra/bin/zmmailbox -z -m "$1" pru '//?fmt=tgz&resolve=reset' "$2"
+#/opt/zimbra/bin/zmmailbox -z -m "$1" pru '//?fmt=tgz&resolve=reset' "$2"
+/opt/zimbra/bin/zmmailbox -z -m "$1" pru '//?fmt=tgz&resolve=modify' "$2"
 
 if [ $? -eq 0 ]
 then

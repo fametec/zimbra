@@ -5,10 +5,10 @@
 
 DESTINATIONLIST=/opt/zimbra/backup/lists
 
-if [ ! -d $DESTINATIONLIST ]
+if [ ! -d $DESTINATION ]
 then
 
-    mkdir -p $DESTINATIONLIST
+    mkdir -p $DESTINATION
 
 fi
 
@@ -34,12 +34,12 @@ getDistributionListMembership() {
 
 
 
-for item in $(getAllDistributionLists)
+for item in $(getAllDistributionList)
 do
     
-    getDistributionListMembership $item >> ${DESTINATIONLIST}/${item}.txt 
+    getDistributionListMembership $item >> ${DESTINATION}/${item}.txt 
 
-    echo "Distribution list exported to ${DESTINATIONLIST}/${item}.txt"
+    echo "Distribution list exported to ${DESTINATION}/${item}.txt"
     
 done
 
