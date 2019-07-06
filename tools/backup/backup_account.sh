@@ -10,24 +10,28 @@
       exit 1
 
     fi
-  
-      echo -n "Backup of $1 ..."
+    
+    if [ ! -d /opt/zimbra/backup/contas ]; then 
+    
+        mkdir -p /opt/zimbra/backup/contas
+    
+    fi
+    
+    echo -n "Backup of $1 ..."
 
-      /opt/zimbra/bin/zmmailbox -z -m $1 getRestURL "//?fmt=tgz" > /opt/zimbra/backup/contas/$1.tgz
+    su - zimbra -c "/opt/zimbra/bin/zmmailbox -t 0 -z -m $1 getRestURL \"//?fmt=tgz\" > /opt/zimbra/backup/contas/$1.tgz"
 
-      if [ $? -eq 0 ]; then
+    if [ $? -eq 0 ]; then
 
         echo " OK "
 
         exit 0
 
-      else 
+    else 
 
         echo " FAIL "
        
         exit 1
 
-      fi
-
-
+    fi
 
