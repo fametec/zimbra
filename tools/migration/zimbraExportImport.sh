@@ -88,13 +88,17 @@ restoreAccount() {
 
     echo "Restore account $1 ..."
 
-    su - zimbra -c "/opt/zimbra/bin/zmmailbox -z -m ${i} pru \"//?fmt=tgz&resolve=reset\" ${TEMPDIR}/${i}.tgz"
+    su - zimbra -c "/opt/zimbra/bin/zmmailbox -t 0 -z -m ${1} pru -u https://`zmhostname` \"//?fmt=tgz&resolve=skip\" ${TEMPDIR}/${1}.tgz"
+
+# su - zimbra -c "/opt/zimbra/bin/zmmailbox -t 0 -z -m ${1} pru -u https://`zmhostname` \"//?fmt=tgz&resolve=skip\" ${TEMPDIR}/${1}.tgz"
+
+
 
     if [ $? -ne 0 ]; then
-      echo "$1 failed" >> /tmp/$0.log
+      echo "$1 failed" >> /tmp/restore.log
       return 2
     else 
-      echo "$1 successfully " >> /tmp/$0.log
+      echo "$1 successfully " >> /tmp/restore.log
     fi
 
     echo "done"
