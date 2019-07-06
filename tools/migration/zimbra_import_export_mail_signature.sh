@@ -73,7 +73,7 @@ deploySignature() {
 
     echo -n "Deploy signature of the $1 from $2 ..."
 
-    su - zimbra -c "zmprov -l ma ${1} zimbraPrefMailSignature `cat $2`"
+    su - zimbra -c "zmprov -l ma ${1} zimbraPrefMailSignatureEnabled TRUE zimbraPrefMailSignature `cat $2`"
 
     if [ $? -ne 0 ]; then
       echo "fail"
@@ -83,7 +83,7 @@ deploySignature() {
       echo "done"
     fi
 
-    su - zimbra -c "zmprov -l ma ${1} zimbraPrefMailSignatureHTML `cat ${2}.html`"
+    su - zimbra -c "zmprov -l ma ${1} zimbraPrefMailSignatureEnabled TRUE zimbraPrefMailSignatureHTML `cat ${2}.html`"
 
     if [ $? -ne 0 ]; then
       echo "fail"
@@ -92,6 +92,14 @@ deploySignature() {
     else 
       echo "done"
     fi
+
+    echo -ne "Adding SignatureID to account: $1 \t"
+
+    signatureid=`su - zimbra -c "zmprov -l ga ${1} zimbraSignatureId" | sed -n '2p' | cut -d : -f 2 | sed 's/^\ //g'`
+
+    su - zimbra -c "zmprov ma ${1} zimbraPrefDefaultSignatureId \"$signatureid\""
+
+    su - zimbra -c "zmprov ma ${1} zimbraPrefForwardReplySignatureId \"$signatureid\""
 
     su - zimbra -c "zmprov -l ga ${1} zimbraPrefMailSignature"
 
