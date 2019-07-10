@@ -1,10 +1,8 @@
 #!/bin/bash
 
-
-set -xv
+# set -xv
 
 NOW=`date +%Y_%m_%d_%H_%M`
-
 
 BACKUP_DIR=/opt/zimbra/backup/ldap
 NFS_DIR=/backup-zimbra/ldap
@@ -22,12 +20,13 @@ then
 fi
 
 
+echo -n "Backup OpenLDAP to $NFS_DIR/$NOW ... "
+
 
 su - zimbra -c "/opt/zimbra/libexec/zmslapcat $BACKUP_DIR"
 su - zimbra -c "/opt/zimbra/libexec/zmslapcat -c $BACKUP_DIR"
 su - zimbra -c "/opt/zimbra/libexec/zmslapcat -a $BACKUP_DIR"
 
-
 mv $BACKUP_DIR $NFS_DIR/$NOW/
 
-
+echo "done"
