@@ -2,36 +2,48 @@
 # set -xv
 # Script para backup
 
+if [ -z $2 ]
+then
 
-    if [ -z $1 ]; then
-      
-      echo "Use: $0 account"; 
+    DESTINATION=/opt/zimbra/backup/accounts
 
-      exit 1
+else
 
-    fi
-    
-    if [ ! -d /opt/zimbra/backup/contas ]; then 
-    
-        mkdir -p /opt/zimbra/backup/contas
-    
-    fi
-    
-    echo -n "Backup of $1 ..."
+    DESTINATION=$2
 
-    su - zimbra -c "/opt/zimbra/bin/zmmailbox -t 0 -z -m $1 getRestURL \"//?fmt=tgz\" > /opt/zimbra/backup/contas/$1.tgz"
+fi
 
-    if [ $? -eq 0 ]; then
+if [ -z $1 ]
+then
 
-        echo " OK "
+    echo "Use: $0 account";
 
-        exit 0
+    exit 2
 
-    else 
+fi
 
-        echo " FAIL "
-       
-        exit 1
+if [ ! -d $DESTINATION ]
+then
 
-    fi
+    mkdir -p $DESTINATION
 
+fi
+
+echo -n "Backup of $1 to ${DESTINATION}/${1}.tgz ..."
+
+su - zimbra -c "/opt/zimbra/bin/zmmailbox -t 0 -z -m ${1} getRestURL \"//?fmt=tgz\" > ${DESTINATION}/${1}.tgz"
+
+if [ $? -eq 0 ]
+then
+
+    echo " done "
+
+    exit 0
+
+else
+
+    echo " fail "
+
+    exit 1
+
+fi
