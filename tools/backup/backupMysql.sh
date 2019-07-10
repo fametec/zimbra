@@ -1,82 +1,92 @@
 #!/bin/sh
-#===============================================================================
-#
-#          FILE:  
-# 
-#         USAGE:  
-# 
-#   DESCRIPTION:  Backup MySQL Database
-# 
-#       OPTIONS:  ---
-#  REQUIREMENTS:  
-#          BUGS:  ---
-#         NOTES:  ---
-#        AUTHOR:  Eduardo Fraga <eduardo@fametec.com.br>
-#       COMPANY:  FAMETEC
-#       VERSION:  1.0
-#       CREATED:  April 26 2019
-#      REVISION:  ---
-#===============================================================================
-#
-#Debug
-# set -xv
-#
-#
-exec_bkp()
-{
-if [ -z $1 ]; then 
-  echo "use: $0 nome_do_banco"
-  exit 1
-fi
-# Variaveis
-# vB="--all-databases"                # Todas as base de dados
-local databaseName=$1
-vBI="/opt/zimbra/common/bin/"                     # Diretorio raiz dos binarios do Mysql     
-vD="/opt/zimbra/backup/mysql/"            # Destino do Backup
-vE=".sql"                           # extencao do arquivo de saida
-vT="`mktemp -d`"  #Diretorio Temporario
 
-vAno=`date +%Y` #Ano
-vMes=`date +%m` #Mes
-vDia=`date +%d` #Dia
-vHor=`date +%H` #Hora
-vMin=`date +%M` #Min
-vDat="$vAno$vMes$vDia-$vHor$vMin"
-vQ=mysql-"$i"-"$vDat$vE"
-vA="$vQ".gz
-vS="-p5nYodvePtxbdbpayKsuKaDpzH1"
-# BACKUP #####################
-echo "==================================================="
-echo "# Gerando backup MYSQL $i"
-echo "# Data   : $vDia / $vMes / $vAno  -  $vHor : $vMin"
-echo "# Destino: $vD"
-echo "# Nome do arquivo: $vA"
-# echo "Comando --> $vBI""mysqldump  --single-transaction  -uroot $vS $i > $vD$vA"
-# $vBI""mysqldump  --single-transaction  -uroot $vS $i > $vD$vA
-# alterado por Francisco em 25-11-2013, valor original acima
-"$vBI"mysqldump --socket=/opt/zimbra/data/tmp/mysql/mysql.sock --single-transaction --routines -uroot $vS $databaseName > $vT/$vQ
-if [ $? -eq 0 ]; then 
-  echo "# BACKUP MYSQL $vA Finalizado com sucesso!" 
-  echo "===================================================" 
-else 
-  echo "# BACKUP MYSQL $vA Falhou, saindo..." 
-  echo "===================================================" 
-  exit 1 
-fi 
-gzip -c $vT/$vQ > $vD$vA
-if [ ! $? -eq 0 ]; then
-  echo "# Erro ao compactar $vA "
-  exit 2
-else
-  if [ -d $vT ]; then 
-   rm -rf $vT
-  fi
-fi
+#Debug
+# set -x
+#
+#
+
+MYSQL_USER=zimbra
+
+MYSQL_PASS=`su - zimbra -c 'zmlocalconfig --format nokey --show zimbra_mysql_password'`
+
+MYSQL_SOCKET=`su - zimbra -c 'zmlocalconfig --format nokey mysql_socket'`
+
+BACKUP_DIR="/backup-zimbra/mysql"
+
+NOW=`date +%Y%m%d%H%M`
+
+exec_bkp() {
+
+        if [ -z $1 ];
+        then
+
+                echo "use: $0 nome_do_banco"
+                exit 1
+        fi
+
+        local databaseName=$1
+
+        if [ ! -d $BACKUP_DIR/$NOW ]
+        then
+                mkdir -p $BACKUP_DIR/$NOW
+
+                chown zimbra:zimbra $BACKUP_DIR/$NOW
+
+        fi
+
+        /opt/zimbra/common/bin/mysqldump --socket=${MYSQL_SOCKET} -u ${MYSQL_USER} -p${MYSQL_PASS} --single-transaction --routines --databases ${databaseName} > ${BACKUP_DIR}/${NOW}/${databaseName}.sql
+
+
+
+        if [ $? -ne 0 ]; then
+
+                echo "$1 Error"
+
+                exit 1
+
+        fi
+
+
 }
-# Fim da Funcao exec_bkp
-# Inicio do script de backup que chama a funcao exec_bkp
-bancodados="$(mysql --socket=/opt/zimbra/data/tmp/mysql/mysql.sock -uroot -p5nYodvePtxbdbpayKsuKaDpzH1 -Bse 'show databases')"
-for i in $bancodados;
+
+
+
+compactar() {
+
+        echo -n "Compactando... "
+
+        tar -zcf ${BACKUP_DIR}/mysql-$NOW.tar.gz ${BACKUP_DIR}/${NOW}
+
+#       tar cf - ${BACKUP_DIR}/${NOW} -P | pv -s $(du -sb ${BACKUP_DIR}/${NOW} | awk '{print $1}') | gzip > ${BACKUP_DIR}/mysql-$NOW.tar.gz
+
+        if [ $? -eq 0 ]; then
+
+            rm -rf ${BACKUP_DIR}/${NOW}
+
+        fi
+
+        echo "done"
+
+}
+
+
+
+echo -n "Backup: "
+
+DATABASES=`su - zimbra -c "mysql -Bse 'show databases'"`
+
+for database in $DATABASES;
 do
- exec_bkp $i
-done;
+
+        exec_bkp $database
+
+        echo -n "#"
+
+done
+
+echo " done!"
+
+compactar
+
+
+
