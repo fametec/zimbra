@@ -25,20 +25,27 @@ then
 fi
 
 
-echo -n "Restoring ${1}..."
+echo -n "Restoring ${1} from ${2} ..."
 
-#/opt/zimbra/bin/zmmailbox -z -m "$1" pru '//?fmt=tgz&resolve=reset' "$2"
-/opt/zimbra/bin/zmmailbox -z -m "$1" pru '//?fmt=tgz&resolve=modify' "$2"
+/opt/zimbra/bin/zmmailbox -t 0 -z -m "$1" pru -u https://`zmhostname` '//?fmt=tgz&resolve=skip' "$2"
+
+# The resolve= parameter has several options:
+# - skip:    ignores duplicates of old items, it’s also the default conflict-resolution.
+# - modify:  changes old items.
+# - reset:   will delete the old subfolder (or entire mailbox if /).
+# - replace: will delete and re-enter them.
+
 
 if [ $? -eq 0 ]
 then
 
-    echo "done"
+    echo "done!"
 
 else
 
-    echo "fail"
+    echo "fail!"
     exit 3
+    
 fi
 
 
