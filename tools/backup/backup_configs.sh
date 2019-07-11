@@ -5,7 +5,7 @@ DESTINATION=/opt/zimbra/backup/config/
 NOW=`date +%Y%m%d%H%M`
 
 
-if [ -d $DESTINATION ]
+if [ ! -d $DESTINATION ]
 then
 
         mkdir -p $DESTINATION
