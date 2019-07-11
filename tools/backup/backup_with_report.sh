@@ -5,6 +5,7 @@
 
 # Require: backup_account.sh
 
+BACKUP_DIR=/opt/zimbra/backup/accounts
 
 OUTPUT=/opt/zimbra/backup/relatorio_backup.csv
 
@@ -39,7 +40,7 @@ do
 
   echo -n "\"$MBOXSIZE\"," >> $OUTPUT
 
-  echo -n "\"`ls -lh /backup-zimbra/accounts/${i}.tgz | cut -d ' ' -f 5` \"," >> $OUTPUT
+  echo -n "\"`ls -lh $BACKUP_DIR/${i}.tgz | cut -d ' ' -f 5` \"," >> $OUTPUT
 
   echo "\"`date +%Y-%m-%d\ %H:%M`\"" >> $OUTPUT
 
