@@ -7,7 +7,7 @@
 
 BACKUP_DIR=/opt/zimbra/backup/accounts
 
-OUTPUT=/opt/zimbra/backup/relatorio_backup.csv
+OUTPUT=$BACKUP_DIR/backup_report.csv
 
 if [ -z $1 ]; then
         ACCOUNTS="`su - zimbra -c "zmprov -l gaa" | sort`"
