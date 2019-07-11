@@ -2,6 +2,17 @@
 # set -xv
 # Script para backup
 
+
+if [ -z $1 ]
+then
+
+    echo "Use: $0 account or $0 account path_destination";
+
+    exit 2
+
+fi
+
+
 if [ -z $2 ]
 then
 
@@ -13,14 +24,6 @@ else
 
 fi
 
-if [ -z $1 ]
-then
-
-    echo "Use: $0 account";
-
-    exit 2
-
-fi
 
 if [ ! -d $DESTINATION ]
 then
@@ -28,6 +31,7 @@ then
     mkdir -p $DESTINATION
 
 fi
+
 
 echo -n "Backup of $1 to ${DESTINATION}/${1}.tgz ..."
 
