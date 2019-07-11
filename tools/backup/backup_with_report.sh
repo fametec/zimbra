@@ -36,7 +36,7 @@ do
 
   echo -n "\"$i\"," >> $OUTPUT
 
-  ./backup_account.sh $i
+  ./backup_account.sh $i "$BACKUP_DIR"
 
   echo -n "\"$MBOXSIZE\"," >> $OUTPUT
 
