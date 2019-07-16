@@ -15,6 +15,7 @@
 ### Desativar SELinux
 
   setenforce 0
+  
   sed -i s/SELINUX=enforcing/SELINUX=permissive/g /etc/selinux/config
 
 
@@ -22,9 +23,13 @@
 ### Criar swap
 
   dd if=/dev/zero of=/swap.file bs=1M count=1024 status=progress
+  
   chmod 600 /swap.file
+  
   mkswap /swap.file
+  
   swapon /swap.file
+  
   echo '/swap.file none swap swap 0 0' >> /etc/fstab
 
 
@@ -75,12 +80,15 @@
 ## Download do ZIMBRA 
 
   cd ~
+  
   curl -L https://files.zimbra.com/downloads/8.8.12_GA/zcs-8.8.12_GA_3794.RHEL7_64.20190329045002.tgz -o zcs-8.8.12_GA_3794.RHEL7_64.20190329045002.tgz 
 
 
 ## Instalação 
 
   tar -zxvf zcs-8.8.12_GA_3794.RHEL7_64.20190329045002.tgz
+  
   cd zcs-8.8.12_GA_3794.RHEL7_64.20190329045002
+  
   ./install.sh
   
