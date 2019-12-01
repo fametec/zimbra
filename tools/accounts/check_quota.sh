@@ -9,6 +9,11 @@
 #
 # Autor: Eduardo Fraga <eduardo@eftech.com.br>
 #
+# Instalação: 
+# crontab -e
+#
+# 0 1 * * * /opt/zimbra/backup/check_quota.sh >/dev/null 2>&1
+#
 # Licença: GPLv3
 #
 ###############################################################################
