@@ -7,6 +7,6 @@ docker run -it --rm \
 -p 443:443 \
 -v $(pwd):/etc/letsencrypt \
 certbot/certbot \
---standalone renew
+--standalone --preferred-chain  "ISRG Root X1" renew
 #
 su – zimbra -c 'zmproxyctl start'
