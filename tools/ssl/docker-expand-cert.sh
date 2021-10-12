@@ -7,7 +7,7 @@ docker run -it --rm \
 -p 443:443 \
 -v $(pwd):/etc/letsencrypt \
 certbot/certbot \
-certonly --standalone --expand \
+certonly --standalone --preferred-chain  "ISRG Root X1" --expand \
 -d mail.poc.eftech.com.br \
 -d novo.poc.eftech.com.br
 #
