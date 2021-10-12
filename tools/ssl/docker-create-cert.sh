@@ -9,6 +9,7 @@ docker run -it --rm \
 certbot/certbot \
 certonly --standalone \
 --email suporte@fametec.com.br --agree-tos \
+--preferred-chain  "ISRG Root X1" \
 -d mail.poc.eftech.com.br \
 -d smtp.poc.eftech.com.br \
 -d zimbra.poc.eftech.com.br \
