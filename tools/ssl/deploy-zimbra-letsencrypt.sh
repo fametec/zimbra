@@ -2,7 +2,7 @@
 
 set -x
 
-if [ $USER -ne 'zimbra' ]
+if [ "$USER" != "zimbra" ]
 then
   echo "Run this script with Zimbra user only" 
   exit 1
@@ -48,7 +48,7 @@ then
   fi
 fi
 
-if [ -e isrgrootx1.pem && -e lets-encrypt-r3.pem && -e chain.pem ]
+if [ -e isrgrootx1.pem ] && [ -e lets-encrypt-r3.pem ] && [ -e chain.pem ]
 then
   echo -n "Generate chain-ca.pem ..." 
   cat isrgrootx1.pem lets-encrypt-r3.pem chain.pem > chain-ca.pem
@@ -72,4 +72,3 @@ echo "Verifiy deploy"
 zmcontrol restart || exit 7
 
 zmcontrol status 
-
