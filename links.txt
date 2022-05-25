@@ -1,3 +1,9 @@
+## Ubuntu 20.04 
+
+https://files.zimbra.com/downloads/8.8.15_GA/zcs-8.8.15_GA_4179.UBUNTU20_64.20211118033954.tgz
+https://files.zimbra.com/downloads/8.8.15_GA/zcs-8.8.15_GA_4179.UBUNTU20_64.20211118033954.tgz.md5
+https://files.zimbra.com/downloads/8.8.15_GA/zcs-8.8.15_GA_4179.UBUNTU20_64.20211118033954.tgz.sha256
+
 
 ## CentOS 7 	64bit x86 (MD5) (SHA 256)
 
